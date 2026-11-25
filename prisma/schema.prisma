@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EstadoPedido {
+  PENDIENTE
+  PAGADO
+  ENVIADO
+  CANCELADO
+}
+
+model Cliente {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String   @uniqe
+  telefono  String?
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  pedidos   Pedido[]
+
+  @@map("clientes")
+}
+
+model Categoria {
+  id          Int        @id @default(autoincrement())
+  nombre      String     @unique
+  descripcion String?
+  productos   Producto[]
+
+  @@map("categorias")
+}
+
+model Producto {
+  id          Int             @id @default(autoincrement())
+  nombre      String
+  descripcion String?
+  precio      Float
+  stock       Int             @default(0)
+  createdAt   DateTime        @default(now())
+  categoriaId Int
+  categoria   Categoria       @relation(fields: [categoriaId], references: [id])
+
+  @@map("productos")
+}
+
+model Pedido {
+  id        Int             @id @default(autoincrement())
+  estado    EstadoPedido    @default(PENDENTE)
+  total     Float           @default(0)
+  createdAt DateTime        @default(now())
+  clienteId Int
+  cliente   Cliente         @relation(fields: [clienteId], references: [id])
+  detalles  DetallePedido[]
+
+  @@map("pedidos")
+}
+
+model DetallePedido {
+  id             Int      @id @default(autoincrement())
+  cantidad       Int
+  precioUnitario Float
+  subtotal       Float
+  pedidoId       Int
+  productoId     Int
+  pedido         Pedido   @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  producto       Producto @relation(fields: [productoId], references: [id])
+
+  @@map("detalles_pedido")
+}
