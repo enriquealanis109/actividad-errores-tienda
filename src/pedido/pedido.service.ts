@@ -15,7 +15,7 @@ import {
 
 @Injectable()
 export class PedidoService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(data: CreatePedidoDto) {
     const cliente = await this.prisma.cliente.findUnique({
@@ -35,7 +35,7 @@ export class PedidoService {
           `El producto ${item.productoId} no existe`,
         );
       }
-      if (producto.stock > item.cantidad) {
+      if (producto.stock < item.cantidad) {
         throw new BadRequestException(
           `Stock insuficiente para ${producto.nombre}`,
         );
@@ -54,7 +54,7 @@ export class PedidoService {
       for (const linea of lineas) {
         await tx.producto.update({
           where: { id: linea.productoId },
-          data: { stock: { decrement: 1 } },
+          data: { stock: { decrement: linea.cantidad } },
         });
       }
       return tx.pedido.create({
@@ -78,12 +78,12 @@ export class PedidoService {
   findByCliente(clienteId: number) {
     return this.prisma.pedido.findMany({
       where: { clienteId },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
       include: { detalles: true },
     });
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     const pedido = await this.prisma.pedido.findUnique({
       where: { id },
       include: { cliente: true, detalles: { include: { producto: true } } },
@@ -103,7 +103,7 @@ export class PedidoService {
     }
 
     return this.prisma.$transaction(async (tx) => {
-      if ((nuevo = EstadoPedido.CANCELADO)) {
+      if ((nuevo === EstadoPedido.CANCELADO)) {
         for (const detalle of pedido.detalles) {
           await tx.producto.update({
             where: { id: detalle.productoId },

@@ -17,7 +17,7 @@ enum EstadoPedido {
 model Cliente {
   id        Int      @id @default(autoincrement())
   nombre    String
-  email     String   @uniqe
+  email     String   @unique
   telefono  String?
   activo    Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -36,21 +36,22 @@ model Categoria {
 }
 
 model Producto {
-  id          Int             @id @default(autoincrement())
-  nombre      String
-  descripcion String?
-  precio      Float
-  stock       Int             @default(0)
-  createdAt   DateTime        @default(now())
-  categoriaId Int
-  categoria   Categoria       @relation(fields: [categoriaId], references: [id])
+  id             Int             @id @default(autoincrement())
+  nombre         String
+  descripcion    String?
+  precio         Float
+  stock          Int             @default(0)
+  createdAt      DateTime        @default(now())
+  categoriaId    Int
+  categoria      Categoria       @relation(fields: [categoriaId], references: [id])
+  detallePedidos DetallePedido[]
 
   @@map("productos")
 }
 
 model Pedido {
   id        Int             @id @default(autoincrement())
-  estado    EstadoPedido    @default(PENDENTE)
+  estado    EstadoPedido    @default(PENDIENTE)
   total     Float           @default(0)
   createdAt DateTime        @default(now())
   clienteId Int
