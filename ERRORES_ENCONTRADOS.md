@@ -35,3 +35,17 @@
 3. **¿Qué harías para evitar este tipo de errores en tus propios proyectos?**
 
    Revisaría mejor el código antes de terminar, probaría las funciones y ejecutaría los comandos para comprobar que todo esté funcionando.
+
+
+**Ivan Jimenez - 25 de Nociembre 2026**
+
+# Errores encontrados y corregidos — Módulo Clientes
+
+| # | Archivo | Línea | Tipo | ¿Qué estaba mal? | ¿Cómo lo detectaste? | ¿Cómo lo solucionaste? |
+|---|---|---|---|---|---|---|
+| 1 | `cliente.controller.ts` | 29 | Sintaxis | Faltaba cerrar el paréntesis en el decorador `@Get(':id'`. | Visual Studio Code marcaba un error de sintaxis. | Agregué el paréntesis de cierre `)`. |
+| 2 | `create-cliente.dto.ts` | 11 | Typo | La propiedad del correo estaba escrita como `emial` en lugar de `email`. | Al crear un cliente, TypeScript mostraba una incompatibilidad entre las propiedades. | Corregí el nombre de la propiedad a `email`. |
+| 3 | `cliente.service.ts` | 16 | Lógica | La búsqueda de clientes existentes utilizaba `data.nombre` para comparar el campo `email`. | Al revisar el método `create`, identifiqué que se comparaba el correo con el nombre. | Cambié `data.nombre` por `data.email` para comprobar correctamente si el correo ya existe. |
+| 4 | `app.module.ts` | 5 | Ruta de importación | La ruta utilizaba `clientes` (plural), pero la carpeta se llama `cliente` (singular). | Al ejecutar `npm run build`, la terminal indicó que no encontraba el módulo. | Corregí la ruta de importación utilizando el nombre correcto de la carpeta. |
+| 5 | `main.ts` | 2 | Importación | `ValidationPipe` se estaba importando desde `@nestjs/core`, pero pertenece a `@nestjs/common`. | Al ejecutar `npm run build`, TypeScript indicó que esa exportación no existía. | Corregí la importación para utilizar `ValidationPipe` desde `@nestjs/common`. |
+| 6 | `package.json` | Script `start:dev` | Typo | El comando estaba escrito como `nest star --watch` en lugar de `nest start --watch`. | Al ejecutar `npm run start:dev`, la terminal indicó que el comando era inválido. | Corregí `star` por `start`. |

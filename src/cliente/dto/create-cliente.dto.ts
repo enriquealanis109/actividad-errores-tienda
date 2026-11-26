@@ -9,7 +9,7 @@ export class CreateClienteDto {
 
   @ApiProperty({ example: 'carlos@correo.com' })
   @IsEmail()
-  emial!: string;
+  email!: string;
 
   @ApiPropertyOptional({ example: '70012345' })
   @IsOptional()

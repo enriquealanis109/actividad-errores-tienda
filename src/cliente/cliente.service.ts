@@ -13,7 +13,7 @@ export class ClienteService {
 
   async create(data: CreateClienteDto) {
     const existe = await this.prisma.cliente.findUnique({
-      where: { email: data.nombre },
+      where: { email: data.email },
     });
     if (existe) {
       throw new ConflictException('Ya existe un cliente con ese correo');
