@@ -21,7 +21,7 @@ export class ProductoService {
     return this.prisma.producto.findMany({
       where: {
         categoriaId,
-        nombre: buscar ? { contains: buscar, mode: 'insensitiv' } : undefined,
+        nombre: buscar ? { contains: buscar, mode: 'insensitive' } : undefined,
       },
       orderBy: { nombre: 'asc' },
     });
@@ -30,7 +30,7 @@ export class ProductoService {
   async findOne(id: number) {
     const producto = await this.prisma.producto.findUnique({
       where: { id },
-      include: { categorias: true },
+      include: { categoria: true },
     });
     if (!producto) {
       throw new NotFoundException(`El producto ${id} no existe`);
