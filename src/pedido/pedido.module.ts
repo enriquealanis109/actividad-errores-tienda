@@ -6,4 +6,4 @@ import { PedidoService } from './pedido.service.js';
   controllers: [PedidoController],
   providers: [PedidoService],
 })
-export class PedidoModulo {}
+export class PedidoModule { }

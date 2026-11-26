@@ -44,4 +44,12 @@ describe('puedeCambiarEstado', () => {
   it('un pedido ENVIADO no se puede cancelar', () => {
     expect(puedeCambiarEstado('ENVIADO', 'CANCELADO')).toBe(false);
   });
+
+  it('PENDIENTE puede pasar a CANCELADO', () => {
+    expect(puedeCambiarEstado('PENDIENTE', 'CANCELADO')).toBe(true);
+  });
+
+  it('PAGADO puede pasar a CANCELADO', () => {
+    expect(puedeCambiarEstado('PAGADO', 'CANCELADO')).toBe(true);
+  });
 });
