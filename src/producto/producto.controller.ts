@@ -13,6 +13,7 @@ import { ApiQuery } from '@nestjs/swagger';
 import { ProductoService } from './producto.service.js';
 import { CreateProductoDto } from './dto/create-producto.dto.js';
 import { UpdateProductoDto } from './dto/update-producto.dto.js';
+import { optionalRequire } from '@nestjs/core/internal';
 
 @Controller('productos')
 export class ProductoController {
@@ -27,7 +28,7 @@ export class ProductoController {
   @ApiQuery({ name: 'categoriaId', required: false, type: Number })
   @ApiQuery({ name: 'buscar', required: false, type: String })
   findAll(
-    @Query('categoriaId', ParseIntPipe)
+    @Query('categoriaId', new ParseIntPipe({ optional: true }))
     categoriaId?: number,
     @Query('buscar') buscar?: string,
   ) {
