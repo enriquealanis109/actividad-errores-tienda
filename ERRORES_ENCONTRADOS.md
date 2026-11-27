@@ -79,3 +79,18 @@
 3. **¿Qué harías para evitar este tipo de errores en tus propios proyectos?**
 
    Leería bien las reglas de negocio antes de escribir las validaciones (por ejemplo, si un dato es decimal o entero) y probaría cada endpoint con y sin sus filtros opcionales, para no asumir que funciona solo porque compila.
+
+---
+**Nombre:** Roberto Trinidad
+
+**Fecha:** 26/11/2026
+
+
+# Errores encontrados y corregidos — Módulo Categorías
+
+| # | Archivo | Línea | Tipo | ¿Qué estaba mal? | ¿Cómo lo detectaste? | ¿Cómo lo solucionaste? |
+| --- | --- | ---: | --- | --- | --- | --- |
+| 1 | `src/categoria/dto/create-categoria.dto.ts` | 14 | Sintaxis | Faltaba cerrar la clase del DTO, así que TypeScript no podía compilar. | Al ejecutar `npm run build`, TypeScript reportó que esperaba `}`. | Agregué la llave de cierre de la clase. |
+| 2 | `src/categoria/categoria.service.ts` | 9 | Terminal | El servicio no tenía `@Injectable()`, necesario para que Nest inyecte `PrismaService`. | Al revisar cómo estaban declarados los demás servicios de Nest. | Importé y agregué el decorador `@Injectable()`. |
+| 3 | `src/categoria/categoria.service.ts` | 47 | Lógica | La condición `cantidad < 0` nunca se cumple, porque no puede haber una cantidad negativa de productos; por eso se podía borrar una categoría con productos. | Comparé la condición con la regla de negocio y comprobé el conteo de productos. | Cambié la condición a `cantidad > 0` para responder con conflicto cuando hay productos. |
+| 4 | `src/categoria/categoria.service.ts` | 38 | Lógica | Al actualizar una categoría no se comprobaba si el nuevo nombre ya pertenecía a otra, pese a que el nombre debe ser único y el endpoint debe responder 409. | Revisé la regla de nombre único y comparé la actualización con la validación del método `create`. | Comprobé el nombre antes de actualizar y lancé `ConflictException` si ya está en uso por otra categoría. |
