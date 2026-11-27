@@ -36,16 +36,46 @@
 
    Revisaría mejor el código antes de terminar, probaría las funciones y ejecutaría los comandos para comprobar que todo esté funcionando.
 
-
 **Ivan Jimenez - 25 de Nociembre 2026**
 
 # Errores encontrados y corregidos — Módulo Clientes
 
-| # | Archivo | Línea | Tipo | ¿Qué estaba mal? | ¿Cómo lo detectaste? | ¿Cómo lo solucionaste? |
-|---|---|---|---|---|---|---|
-| 1 | `cliente.controller.ts` | 29 | Sintaxis | Faltaba cerrar el paréntesis en el decorador `@Get(':id'`. | Visual Studio Code marcaba un error de sintaxis. | Agregué el paréntesis de cierre `)`. |
-| 2 | `create-cliente.dto.ts` | 11 | Typo | La propiedad del correo estaba escrita como `emial` en lugar de `email`. | Al crear un cliente, TypeScript mostraba una incompatibilidad entre las propiedades. | Corregí el nombre de la propiedad a `email`. |
-| 3 | `cliente.service.ts` | 16 | Lógica | La búsqueda de clientes existentes utilizaba `data.nombre` para comparar el campo `email`. | Al revisar el método `create`, identifiqué que se comparaba el correo con el nombre. | Cambié `data.nombre` por `data.email` para comprobar correctamente si el correo ya existe. |
-| 4 | `app.module.ts` | 5 | Ruta de importación | La ruta utilizaba `clientes` (plural), pero la carpeta se llama `cliente` (singular). | Al ejecutar `npm run build`, la terminal indicó que no encontraba el módulo. | Corregí la ruta de importación utilizando el nombre correcto de la carpeta. |
-| 5 | `main.ts` | 2 | Importación | `ValidationPipe` se estaba importando desde `@nestjs/core`, pero pertenece a `@nestjs/common`. | Al ejecutar `npm run build`, TypeScript indicó que esa exportación no existía. | Corregí la importación para utilizar `ValidationPipe` desde `@nestjs/common`. |
-| 6 | `package.json` | Script `start:dev` | Typo | El comando estaba escrito como `nest star --watch` en lugar de `nest start --watch`. | Al ejecutar `npm run start:dev`, la terminal indicó que el comando era inválido. | Corregí `star` por `start`. |
+| #   | Archivo                 | Línea              | Tipo                | ¿Qué estaba mal?                                                                               | ¿Cómo lo detectaste?                                                                 | ¿Cómo lo solucionaste?                                                                     |
+| --- | ----------------------- | ------------------ | ------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| 1   | `cliente.controller.ts` | 29                 | Sintaxis            | Faltaba cerrar el paréntesis en el decorador `@Get(':id'`.                                     | Visual Studio Code marcaba un error de sintaxis.                                     | Agregué el paréntesis de cierre `)`.                                                       |
+| 2   | `create-cliente.dto.ts` | 11                 | Typo                | La propiedad del correo estaba escrita como `emial` en lugar de `email`.                       | Al crear un cliente, TypeScript mostraba una incompatibilidad entre las propiedades. | Corregí el nombre de la propiedad a `email`.                                               |
+| 3   | `cliente.service.ts`    | 16                 | Lógica              | La búsqueda de clientes existentes utilizaba `data.nombre` para comparar el campo `email`.     | Al revisar el método `create`, identifiqué que se comparaba el correo con el nombre. | Cambié `data.nombre` por `data.email` para comprobar correctamente si el correo ya existe. |
+| 4   | `app.module.ts`         | 5                  | Ruta de importación | La ruta utilizaba `clientes` (plural), pero la carpeta se llama `cliente` (singular).          | Al ejecutar `npm run build`, la terminal indicó que no encontraba el módulo.         | Corregí la ruta de importación utilizando el nombre correcto de la carpeta.                |
+| 5   | `main.ts`               | 2                  | Importación         | `ValidationPipe` se estaba importando desde `@nestjs/core`, pero pertenece a `@nestjs/common`. | Al ejecutar `npm run build`, TypeScript indicó que esa exportación no existía.       | Corregí la importación para utilizar `ValidationPipe` desde `@nestjs/common`.              |
+| 6   | `package.json`          | Script `start:dev` | Typo                | El comando estaba escrito como `nest star --watch` en lugar de `nest start --watch`.           | Al ejecutar `npm run start:dev`, la terminal indicó que el comando era inválido.     | Corregí `star` por `start`.                                                                |
+
+---
+
+# Errores encontrados
+
+**Nombre:** Jose Enrique Alanis Saucedo
+
+**Fecha:** 26/11/2026
+
+> Tipos válidos: `Typo` (editor en rojo) · `Sintaxis` · `Terminal` (Prisma / arranque / endpoint / tests) · `Lógica`
+
+| #   | Archivo                                   | Línea | Tipo   | ¿Qué estaba mal?                                                                                                       | ¿Cómo lo detectaste?                                                                           | ¿Cómo lo solucionaste?                                                 |
+| --- | ----------------------------------------- | ----: | ------ | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| 1   | `src/producto/producto.service.ts`        |    24 | Typo   | El modo de búsqueda decía `mode: 'insensitiv'`, le faltaba la "e" final, así que Prisma no lo reconocía.               | El editor lo marcó en rojo porque no coincidía con el valor que espera Prisma.                 | Corregí `'insensitiv'` por `'insensitive'`.                            |
+| 2   | `src/producto/producto.service.ts`        |    33 | Typo   | El `include` usaba `categorias` en plural, pero la relación en el modelo se llama `categoria` (singular).              | Al arrancar el servidor, Prisma marcó que esa relación no existía.                             | Cambié `categorias` por `categoria`.                                   |
+| 3   | `src/producto/dto/create-producto.dto.ts` |    24 | Lógica | El `precio` se validaba con `@IsInt()`, pero el precio es decimal (2 decimales); rechazaba precios válidos como 99.90. | Revisando las reglas de negocio del README vi que el precio es decimal, no entero.             | Cambié `@IsInt()` por `@IsNumber({ maxDecimalPlaces: 2 })`.            |
+| 4   | `src/producto/producto.controller.ts`     |    30 | Lógica | El filtro `categoriaId` es opcional, pero `ParseIntPipe` sin opciones truena cuando el parámetro no viene en la URL.   | Al probar `GET /productos` sin `?categoriaId`, el endpoint daba error en lugar de listar todo. | Usé `new ParseIntPipe({ optional: true })` para permitir que no venga. |
+
+## Reflexión final
+
+1. **¿Qué tipo de error te costó más encontrar y por qué?**
+
+   Los errores de lógica, como el del `precio` y el del filtro `categoriaId`. Los typos el editor los marcaba en rojo enseguida, pero los de lógica no, el código compilaba sin problema y solo me daba cuenta de que algo estaba mal cuando probaba el endpoint y el resultado no era el esperado
+
+2. **¿Qué herramienta te ayudó más (editor, terminal, Swagger/Postman, tests)?**
+
+   Me apoyé en las tres el editor para los typos en rojo, la terminal para los errores de Prisma al arrancar, y Postman/Swagger para probar los endpoints y ver los errores de lógica que no se ven en el código.
+
+3. **¿Qué harías para evitar este tipo de errores en tus propios proyectos?**
+
+   Leería bien las reglas de negocio antes de escribir las validaciones (por ejemplo, si un dato es decimal o entero) y probaría cada endpoint con y sin sus filtros opcionales, para no asumir que funciona solo porque compila.
