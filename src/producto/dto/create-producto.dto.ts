@@ -21,7 +21,7 @@ export class CreateProductoDto {
   descripcion?: string;
 
   @ApiProperty({ example: 7.5 })
-  @IsInt()
+  @IsNumber({ maxDecimalPlaces: 2 })
   @IsPositive()
   precio!: number;
 
